@@ -5,7 +5,10 @@ import contactReducer, {
   updateContact,
   deleteContact,
   setSearchQuery,
+  setSortMode,
+  setCurrentPage,
   selectFilteredContacts,
+  selectDirectoryView,
 } from "../features/contacts/store/contactSlice.js";
 
 vi.mock("../features/contacts/api/contactRepository.js", () => ({
@@ -51,29 +54,80 @@ describe("contactSlice", () => {
   });
 
   it("addContact fulfilled appends item", () => {
-    const initial = { items: [], status: "succeeded", error: null, searchQuery: "", editingContact: null, deleteCandidate: null, formOpen: false };
+    const initial = { items: [], status: "succeeded", error: null, searchQuery: "", sortMode: "updated-desc", currentPage: 1, editingContact: null, deleteCandidate: null, formOpen: false };
     const state = contactReducer(initial, addContact.fulfilled(sampleContact, "", undefined));
     expect(state.items).toHaveLength(1);
     expect(state.formOpen).toBe(false);
   });
 
   it("updateContact fulfilled replaces item", () => {
-    const initial = { items: [sampleContact], status: "succeeded", error: null, searchQuery: "", editingContact: sampleContact, deleteCandidate: null, formOpen: true };
+    const initial = { items: [sampleContact], status: "succeeded", error: null, searchQuery: "", sortMode: "updated-desc", currentPage: 1, editingContact: sampleContact, deleteCandidate: null, formOpen: true };
     const updated = { ...sampleContact, firstName: "Updated" };
     const state = contactReducer(initial, updateContact.fulfilled(updated, "", undefined));
     expect(state.items[0].firstName).toBe("Updated");
   });
 
   it("deleteContact fulfilled removes item", () => {
-    const initial = { items: [sampleContact], status: "succeeded", error: null, searchQuery: "", editingContact: null, deleteCandidate: sampleContact, formOpen: false };
+    const initial = { items: [sampleContact], status: "succeeded", error: null, searchQuery: "", sortMode: "updated-desc", currentPage: 1, editingContact: null, deleteCandidate: sampleContact, formOpen: false };
     const state = contactReducer(initial, deleteContact.fulfilled(1, "", undefined));
     expect(state.items).toHaveLength(0);
     expect(state.deleteCandidate).toBeNull();
   });
 
-  it("setSearchQuery updates query", () => {
-    const state = contactReducer(undefined, setSearchQuery("leanne"));
+  it("setSearchQuery updates query and resets page", () => {
+    const state = contactReducer(
+      { searchQuery: "", currentPage: 3, sortOrder: "asc" },
+      setSearchQuery("leanne"),
+    );
     expect(state.searchQuery).toBe("leanne");
+    expect(state.currentPage).toBe(1);
+  });
+
+  it("setSortMode updates mode and resets page", () => {
+    const state = contactReducer(
+      { searchQuery: "", currentPage: 2, sortMode: "name-asc" },
+      setSortMode("updated-desc"),
+    );
+    expect(state.sortMode).toBe("updated-desc");
+    expect(state.currentPage).toBe(1);
+  });
+
+  it("addContact fulfilled sorts by last updated and resets page", () => {
+    const initial = {
+      items: [{ ...sampleContact, updatedAt: "2020-01-01T00:00:00.000Z" }],
+      status: "succeeded",
+      error: null,
+      searchQuery: "",
+      sortMode: "name-asc",
+      currentPage: 3,
+      editingContact: null,
+      deleteCandidate: null,
+      formOpen: true,
+    };
+    const created = { ...sampleContact, id: 99, firstName: "New", updatedAt: "2026-05-21T12:00:00.000Z" };
+    const state = contactReducer(initial, addContact.fulfilled(created, "", undefined));
+    expect(state.sortMode).toBe("updated-desc");
+    expect(state.currentPage).toBe(1);
+  });
+
+  it("selectDirectoryView paginates sorted contacts", () => {
+    const items = Array.from({ length: 6 }, (_unused, index) => ({
+      ...sampleContact,
+      id: index + 1,
+      firstName: `User${index}`,
+    }));
+    const rootState = {
+      contacts: {
+        items,
+        searchQuery: "",
+        sortMode: "name-asc",
+        currentPage: 2,
+      },
+    };
+    const view = selectDirectoryView(rootState);
+    expect(view.contacts).toHaveLength(1);
+    expect(view.totalPages).toBe(2);
+    expect(view.currentPage).toBe(2);
   });
 
   it("selectFilteredContacts filters by search", () => {

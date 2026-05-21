@@ -1,5 +1,5 @@
 import { Edit2, Trash } from "iconsax-react";
-import { joinFullName } from "../../../shared/lib/formatters.js";
+import { joinFullName, formatLastUpdated } from "../../../shared/lib/formatters.js";
 import { initialsFromName, avatarBackgroundStyle } from "../../../shared/lib/avatarUtils.js";
 
 function StatCell({ label, children }) {
@@ -71,6 +71,9 @@ export function ContactCard({ contact, onEdit, onDelete }) {
             </a>
           </StatCell>
           <StatCell label="Company">{contact.company || "—"}</StatCell>
+        </div>
+        <div className="mt-4 border-t border-neutral-100 pt-4">
+          <StatCell label="Last updated">{formatLastUpdated(contact.updatedAt)}</StatCell>
         </div>
       </div>
     </li>

@@ -15,6 +15,7 @@ describe("mapUserToContact", () => {
     expect(contact.lastName).toBe("Graham");
     expect(contact.company).toBe("Acme");
     expect(contact.city).toBe("Gwenborough");
+    expect(contact.updatedAt).toBeTruthy();
   });
 
   it("handles single word name", () => {

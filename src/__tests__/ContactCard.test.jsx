@@ -11,6 +11,7 @@ const contact = {
   phone: "555-0100",
   company: "Romaguera",
   city: "Gwenborough",
+  updatedAt: "2026-05-21T10:00:00.000Z",
 };
 
 describe("ContactCard", () => {
@@ -18,6 +19,7 @@ describe("ContactCard", () => {
     render(<ContactCard contact={contact} onEdit={vi.fn()} onDelete={vi.fn()} />);
     expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
     expect(screen.getAllByText("leanne@example.com").length).toBeGreaterThan(0);
+    expect(screen.getByText("Last updated")).toBeInTheDocument();
   });
 
   it("calls onEdit and onDelete", async () => {

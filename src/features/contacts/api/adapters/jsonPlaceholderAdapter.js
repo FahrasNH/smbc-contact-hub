@@ -1,6 +1,7 @@
 import { httpClient } from "../httpClient.js";
 import { mapUserToContact, mapContactToUserPayload } from "../../model/contactMapper.js";
 import { readMutations, writeMutations } from "../../../../shared/lib/storage.js";
+import { nowIsoTimestamp } from "../../../../shared/lib/formatters.js";
 
 function mergeContacts(baseContacts, mutations) {
   const deletedSet = new Set(mutations.deletedIds);
@@ -32,6 +33,7 @@ export async function createContact(contactInput) {
   const baseResponse = await httpClient.get("/users");
   const base = baseResponse.data.map(mapUserToContact);
   const newId = nextLocalId(base, mutations);
+  const timestamp = nowIsoTimestamp();
   const newContact = {
     id: newId,
     firstName: contactInput.firstName,
@@ -40,6 +42,7 @@ export async function createContact(contactInput) {
     phone: contactInput.phone,
     company: contactInput.company ?? "",
     city: contactInput.city ?? "",
+    updatedAt: timestamp,
   };
   mutations.created.push(newContact);
   writeMutations(mutations);
@@ -50,15 +53,16 @@ export async function updateContact(contact) {
   await httpClient.put(`/users/${contact.id}`, mapContactToUserPayload(contact));
   const mutations = readMutations();
   const isLocalOnly = mutations.created.some((c) => c.id === contact.id);
+  const updatedContact = { ...contact, updatedAt: nowIsoTimestamp() };
   if (isLocalOnly) {
     mutations.created = mutations.created.map((c) =>
-      c.id === contact.id ? { ...contact } : c,
+      c.id === contact.id ? updatedContact : c,
     );
   } else {
-    mutations.updated[contact.id] = { ...contact };
+    mutations.updated[contact.id] = updatedContact;
   }
   writeMutations(mutations);
-  return contact;
+  return updatedContact;
 }
 
 export async function removeContact(contactId) {
