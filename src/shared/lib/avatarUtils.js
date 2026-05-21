@@ -11,6 +11,6 @@ export function initialsFromName(firstName, lastName) {
 export function avatarBackgroundStyle(contactId) {
   const hue = (contactId * 47) % 360;
   return {
-    background: `linear-gradient(135deg, hsl(${hue} 58% 46%), hsl(${(hue + 40) % 360} 52% 38%))`,
+    background: `linear-gradient(135deg, hsl(${hue} 58% 84%), hsl(${(hue + 20) % 360} 52% 88%), hsl(${(hue + 40) % 360} 45% 92%))`,
   };
 }

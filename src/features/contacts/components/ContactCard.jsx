@@ -19,7 +19,7 @@ export function ContactCard({ contact, onEdit, onDelete }) {
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 flex-1 items-start gap-3">
           <div
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white sm:h-14 sm:w-14 sm:text-sm"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xs font-bold text-neutral-700 sm:h-14 sm:w-14 sm:text-sm"
             style={avatarBackgroundStyle(contact.id)}
             aria-hidden
           >
