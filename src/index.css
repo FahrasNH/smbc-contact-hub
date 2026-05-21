@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+:root {
+  --ds-background: #f8fafc;
+  --ds-surface: #ffffff;
+  --ds-on-surface: #0b1c30;
+  --ds-on-surface-variant: #434655;
+  --ds-primary: #2563eb;
+  --ds-on-primary: #ffffff;
+  --ds-border-subtle: #e8edf5;
+  --ds-border: #e2e8f0;
+  --ds-table-header: #eff4ff;
+  --ds-error: #ba1a1a;
+  --ds-on-error: #ffffff;
+  --ds-error-container: #ffdad6;
+  --ds-on-error-container: #93000a;
+}
+
+@theme inline {
+  --color-ds-background: var(--ds-background);
+  --color-ds-surface: var(--ds-surface);
+  --color-ds-on-surface: var(--ds-on-surface);
+  --color-ds-muted: var(--ds-on-surface-variant);
+  --color-ds-primary: var(--ds-primary);
+  --color-ds-on-primary: var(--ds-on-primary);
+  --color-ds-border: var(--ds-border);
+  --color-ds-border-subtle: var(--ds-border-subtle);
+  --color-ds-table-header: var(--ds-table-header);
+  --color-ds-error: var(--ds-error);
+  --color-ds-on-error: var(--ds-on-error);
+  --color-ds-error-container: var(--ds-error-container);
+  --color-ds-on-error-container: var(--ds-on-error-container);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --shadow-ds-card: 0 10px 30px rgba(0, 0, 0, 0.04);
+  --shadow-ds-card-hover: 0 12px 36px rgba(0, 0, 0, 0.07);
+}
+
+body {
+  min-height: 100%;
+  background-color: var(--ds-background);
+  color: var(--ds-on-surface);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
