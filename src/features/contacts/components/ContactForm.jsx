@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { CloseCircle } from "iconsax-react";
 import { createEmptyContact } from "../model/contactShape.js";
-import { joinFullName } from "../../../shared/lib/formatters.js";
 
 const inputClass =
-  "h-11 w-full rounded-full border border-neutral-200 bg-neutral-50 px-4 text-base text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-neutral-200 focus:bg-white focus:outline-none focus:ring-0";
+  "h-11 w-full rounded-lg border border-neutral-200 bg-neutral-50 px-4 text-base text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-neutral-200 focus:bg-white focus:outline-none focus:ring-0";
 
 export function ContactForm({ contact, onSubmit, onCancel, isSubmitting }) {
   const [form, setForm] = useState(createEmptyContact());
@@ -41,11 +40,11 @@ export function ContactForm({ contact, onSubmit, onCancel, isSubmitting }) {
           </h2>
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 text-neutral-600 hover:bg-neutral-50"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center text-neutral-600 transition-opacity hover:opacity-80"
             aria-label="Close form"
             onClick={onCancel}
           >
-            <CloseCircle size={20} variant="Linear" color="currentColor" aria-hidden />
+            <CloseCircle size={24} variant="Linear" color="currentColor" aria-hidden />
           </button>
         </div>
         <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -123,10 +122,10 @@ export function ContactForm({ contact, onSubmit, onCancel, isSubmitting }) {
               />
             </div>
           </div>
-          <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:justify-end">
+          <div className="mt-10 flex gap-3">
             <button
               type="button"
-              className="h-11 rounded-full bg-neutral-100 px-6 text-sm font-semibold text-neutral-800 transition-colors hover:bg-neutral-200"
+              className="h-11 w-1/2 cursor-pointer rounded-full bg-neutral-100 text-sm font-semibold text-neutral-800 transition-colors hover:bg-neutral-200"
               onClick={onCancel}
             >
               Cancel
@@ -134,7 +133,7 @@ export function ContactForm({ contact, onSubmit, onCancel, isSubmitting }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="h-11 rounded-full bg-ds-primary px-6 text-sm font-semibold text-ds-on-primary shadow-sm transition-opacity hover:opacity-95 disabled:opacity-50"
+              className="h-11 w-1/2 cursor-pointer rounded-full bg-ds-primary text-sm font-semibold text-ds-on-primary shadow-sm transition-opacity hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? "Saving…" : isEdit ? "Save changes" : "Add contact"}
             </button>

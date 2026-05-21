@@ -14,10 +14,12 @@ export function Modal({ open, title, children, onClose }) {
         aria-labelledby="modal-title"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 id="modal-title" className="text-lg font-bold text-neutral-900">
-          {title}
-        </h2>
-        <div className="mt-4">{children}</div>
+        {title ? (
+          <h2 id="modal-title" className="text-lg font-bold text-neutral-900">
+            {title}
+          </h2>
+        ) : null}
+        <div className={title ? "mt-4" : ""}>{children}</div>
       </div>
     </div>
   );

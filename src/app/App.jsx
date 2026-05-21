@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Trash } from "iconsax-react";
 import toast from "react-hot-toast";
 import { ContactTopNav } from "./ContactTopNav.jsx";
 import { ContactToolbar } from "../features/contacts/components/ContactToolbar.jsx";
@@ -124,27 +125,34 @@ export default function App() {
           isSubmitting={formSubmitting}
         />
       )}
-      <Modal
-        open={Boolean(deleteCandidate)}
-        title="Delete contact?"
-        onClose={cancelDelete}
-      >
-        <p className="text-sm text-neutral-600">
-          {deleteCandidate
-            ? `Remove ${joinFullName(deleteCandidate.firstName, deleteCandidate.lastName)}? This cannot be undone.`
-            : ""}
-        </p>
-        <div className="mt-6 flex gap-3">
+      <Modal open={Boolean(deleteCandidate)} onClose={cancelDelete}>
+        <div className="flex flex-col items-center text-center">
+          <div
+            className="flex h-20 w-20 items-center justify-center rounded-full bg-red-500/30"
+            aria-hidden
+          >
+            <Trash size={40} variant="Outline" color="#dc2626" />
+          </div>
+          <h2 id="modal-title" className="mt-4 text-lg font-bold text-neutral-900">
+            Delete contact
+          </h2>
+          <p className="mt-2 text-sm text-neutral-600">
+            {deleteCandidate
+              ? `Remove ${joinFullName(deleteCandidate.firstName, deleteCandidate.lastName)}? This cannot be undone.`
+              : ""}
+          </p>
+        </div>
+        <div className="mt-10 flex gap-3">
           <button
             type="button"
-            className="h-11 flex-1 rounded-full bg-neutral-100 text-sm font-semibold text-neutral-800 hover:bg-neutral-200"
+            className="h-11 flex-1 cursor-pointer rounded-full bg-neutral-100 text-sm font-semibold text-neutral-800 hover:bg-neutral-200"
             onClick={cancelDelete}
           >
             Cancel
           </button>
           <button
             type="button"
-            className="h-11 flex-1 rounded-full bg-red-600 text-sm font-semibold text-white hover:bg-red-700"
+            className="h-11 flex-1 cursor-pointer rounded-full bg-red-600 text-sm font-semibold text-white hover:bg-red-700"
             onClick={handleConfirmDelete}
           >
             Delete
