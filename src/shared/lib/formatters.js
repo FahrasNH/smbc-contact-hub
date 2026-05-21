@@ -10,6 +10,27 @@ export function joinFullName(firstName, lastName) {
   return [firstName, lastName].filter(Boolean).join(" ").trim();
 }
 
+export function seedUpdatedAtFromId(contactId) {
+  return new Date(2024, 0, contactId).toISOString();
+}
+
+export function nowIsoTimestamp() {
+  return new Date().toISOString();
+}
+
+export function formatLastUpdated(isoTimestamp) {
+  if (!isoTimestamp) return "—";
+  const date = new Date(isoTimestamp);
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export function buildSearchableContactText(contact) {
   return [
     contact.firstName,

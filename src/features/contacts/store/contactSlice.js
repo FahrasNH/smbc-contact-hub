@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as contactRepository from "../api/contactRepository.js";
 import { buildSearchableContactText } from "../../../shared/lib/formatters.js";
+import {
+  CONTACT_DIRECTORY_PAGE_SIZE,
+  sortContacts,
+  visiblePageNumbers,
+} from "../../../shared/lib/contactDirectoryUtils.js";
 
 export const fetchContacts = createAsyncThunk(
   "contacts/fetchContacts",
@@ -52,6 +57,8 @@ const initialState = {
   status: "idle",
   error: null,
   searchQuery: "",
+  sortMode: "updated-desc",
+  currentPage: 1,
   editingContact: null,
   deleteCandidate: null,
   formOpen: false,
@@ -63,6 +70,14 @@ const contactSlice = createSlice({
   reducers: {
     setSearchQuery(state, action) {
       state.searchQuery = action.payload;
+      state.currentPage = 1;
+    },
+    setSortMode(state, action) {
+      state.sortMode = action.payload;
+      state.currentPage = 1;
+    },
+    setCurrentPage(state, action) {
+      state.currentPage = action.payload;
     },
     setEditingContact(state, action) {
       state.editingContact = action.payload;
@@ -101,6 +116,8 @@ const contactSlice = createSlice({
         state.items.push(action.payload);
         state.formOpen = false;
         state.editingContact = null;
+        state.sortMode = "updated-desc";
+        state.currentPage = 1;
       })
       .addCase(addContact.rejected, (state, action) => {
         state.error = action.payload;
@@ -126,6 +143,8 @@ const contactSlice = createSlice({
 
 export const {
   setSearchQuery,
+  setSortMode,
+  setCurrentPage,
   setEditingContact,
   clearEditingContact,
   openCreateForm,
@@ -139,6 +158,21 @@ export function selectFilteredContacts(state) {
   return state.contacts.items.filter((contact) =>
     buildSearchableContactText(contact).includes(query),
   );
+}
+
+export function selectDirectoryView(state) {
+  const filtered = selectFilteredContacts(state);
+  const sorted = sortContacts(filtered, state.contacts.sortMode);
+  const totalPages = Math.max(1, Math.ceil(sorted.length / CONTACT_DIRECTORY_PAGE_SIZE));
+  const currentPage = Math.min(Math.max(1, state.contacts.currentPage), totalPages);
+  const sliceStart = (currentPage - 1) * CONTACT_DIRECTORY_PAGE_SIZE;
+  return {
+    contacts: sorted.slice(sliceStart, sliceStart + CONTACT_DIRECTORY_PAGE_SIZE),
+    totalPages,
+    currentPage,
+    paginationItems: visiblePageNumbers(totalPages, currentPage),
+    totalCount: sorted.length,
+  };
 }
 
 export default contactSlice.reducer;
