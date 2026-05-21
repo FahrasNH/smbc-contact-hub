@@ -45,7 +45,7 @@ export function ContactCard({ contact, onEdit, onDelete }) {
         <div className="flex shrink-0 gap-2">
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ds-primary"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ds-primary"
             aria-label={`Edit ${fullName}`}
             onClick={() => onEdit(contact)}
           >
@@ -53,7 +53,7 @@ export function ContactCard({ contact, onEdit, onDelete }) {
           </button>
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ds-primary"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
             aria-label={`Delete ${fullName}`}
             onClick={() => onDelete(contact)}
           >
