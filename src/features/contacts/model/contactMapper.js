@@ -1,4 +1,4 @@
-import { splitFullName } from "../../../shared/lib/formatters.js";
+import { splitFullName, seedUpdatedAtFromId } from "../../../shared/lib/formatters.js";
 
 export function mapUserToContact(user) {
   const { firstName, lastName } = splitFullName(user.name ?? "");
@@ -10,6 +10,7 @@ export function mapUserToContact(user) {
     phone: user.phone ?? "",
     company: user.company?.name ?? "",
     city: user.address?.city ?? "",
+    updatedAt: seedUpdatedAtFromId(user.id),
   };
 }
 

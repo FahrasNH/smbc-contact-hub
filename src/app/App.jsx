@@ -19,7 +19,12 @@ export default function App() {
     status,
     error,
     searchQuery,
-    filteredContacts,
+    sortMode,
+    directoryContacts,
+    totalCount,
+    currentPage,
+    totalPages,
+    paginationItems,
     editingContact,
     deleteCandidate,
     formOpen,
@@ -28,6 +33,8 @@ export default function App() {
     editContact,
     removeContact,
     setSearchQuery,
+    setSortMode,
+    setCurrentPage,
     startEdit,
     cancelForm,
     startCreate,
@@ -101,19 +108,26 @@ export default function App() {
             <ContactToolbar
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
+              sortMode={sortMode}
+              onSortChange={setSortMode}
               onAddClick={startCreate}
             />
           </div>
         </div>
         <div className="mt-8">
           <ContactList
-            contacts={filteredContacts}
+            contacts={directoryContacts}
             status={status}
             error={error}
             searchQuery={searchQuery}
+            totalCount={totalCount}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            paginationItems={paginationItems}
             onEdit={startEdit}
             onDelete={requestDelete}
             onRetry={loadContacts}
+            onPageChange={setCurrentPage}
           />
         </div>
       </main>
