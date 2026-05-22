@@ -9,14 +9,16 @@ Contact directory CRUD app built for the SMBC frontend challenge.
 - Tailwind CSS v4
 - Axios
 - Vitest + React Testing Library
-- JSONPlaceholder Users API (Heroku contact API unavailable)
+- JSONPlaceholder Users API
 
 ## Features
 
 - Create, read, update, delete contacts
 - Real-time search filter
+- Sort by name (A→Z / Z→A) or last updated
+- Pagination
 - Design aligned with next-users (Fluid Admin tokens)
-- Local persistence for mutations (JSONPlaceholder does not persist writes)
+- Local persistence for mutations via `localStorage`
 
 ## Setup
 
@@ -42,12 +44,18 @@ npm run dev
 | `VITE_API_PROVIDER` | `jsonplaceholder` |
 | `VITE_API_BASE_URL` | `https://jsonplaceholder.typicode.com` |
 
-Set `VITE_API_PROVIDER=heroku` if the Heroku contact API is restored.
-
 ## Deploy
 
 Deploy to Vercel with the same environment variables.
 
-## API note
+## API
 
-POST, PUT, and DELETE against JSONPlaceholder simulate success only. Created, updated, and deleted contacts are stored in browser `localStorage` so the UI stays consistent across reloads.
+Project ini menggunakan [JSONPlaceholder](https://jsonplaceholder.typicode.com/users) sebagai data source.
+
+API Heroku yang tercantum di soal challenge (`contact.herokuapp.com`) sudah tidak dapat diakses (deprecated / down). Sebagai gantinya, app ini menggunakan JSONPlaceholder dengan strategi **localStorage overlay**:
+
+- `GET /users` tetap diambil dari JSONPlaceholder
+- Operasi POST, PUT, DELETE hanya disimulasikan oleh JSONPlaceholder (tidak benar-benar persist di server)
+- Semua mutasi (create, update, delete) disimpan di `localStorage` browser agar data konsisten saat reload
+
+Arsitektur adapter memungkinkan penggantian data source cukup dengan mengubah `VITE_API_PROVIDER` tanpa menyentuh kode UI.
