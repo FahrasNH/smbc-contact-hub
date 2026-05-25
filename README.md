@@ -9,7 +9,7 @@ Contact directory CRUD app built for the SMBC frontend challenge.
 - Tailwind CSS v4
 - Axios
 - Vitest + React Testing Library
-- JSONPlaceholder Users API
+- Random User Generator API
 
 ## Features
 
@@ -56,15 +56,7 @@ Project ini menggunakan [Random User Generator](https://randomuser.me/api/?resul
 GET https://randomuser.me/api/?results=30&seed=smbc-hub
 ```
 
-API Heroku yang tercantum di soal challenge (`contact.herokuapp.com`) sudah tidak dapat diakses (deprecated / down). Random User Generator digunakan sebagai pengganti karena menyediakan data user yang realistis (nama lengkap, email, telepon, kota, dan foto profil).
-
 Karena Random User Generator hanya mendukung `GET`, semua operasi mutasi (create, update, delete) ditangani sepenuhnya di sisi klien menggunakan strategi **localStorage overlay**:
 
 - Data awal di-fetch dari `/api/?results=30&seed=smbc-hub` (seed tetap agar data konsisten setiap reload)
 - Create, update, delete disimpan di `localStorage` dan di-merge ke data server saat fetch
-- Arsitektur adapter memungkinkan penggantian backend cukup dengan mengubah `VITE_API_PROVIDER` tanpa menyentuh kode UI
-
-| Provider | Value |
-|----------|-------|
-| Random User (default) | `randomuser` |
-| JSONPlaceholder (fallback) | `jsonplaceholder` |
