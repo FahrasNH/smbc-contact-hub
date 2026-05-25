@@ -11,7 +11,7 @@ function StatCell({ label, children }) {
   );
 }
 
-export function ContactCard({ contact, onEdit, onDelete }) {
+export function ContactCard({ contact, onEdit, onDelete, priority = false }) {
   const fullName = joinFullName(contact.firstName, contact.lastName);
 
   return (
@@ -23,6 +23,9 @@ export function ContactCard({ contact, onEdit, onDelete }) {
               className="h-12 w-12 shrink-0 rounded-full object-cover sm:h-14 sm:w-14"
               src={contact.picture}
               alt={fullName}
+              loading={priority ? "eager" : "lazy"}
+              decoding="async"
+              fetchpriority={priority ? "high" : "auto"}
             />
           ) : (
             <div
