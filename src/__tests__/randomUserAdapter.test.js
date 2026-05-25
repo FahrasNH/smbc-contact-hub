@@ -63,9 +63,11 @@ describe("randomUserAdapter", () => {
       phone: "9",
       company: "",
       city: "",
+      picture: "data:image/png;base64,abc123",
     });
     expect(created.firstName).toBe("New");
     expect(created.id).toMatch(/^local-/);
+    expect(created.picture).toBe("data:image/png;base64,abc123");
     expect(writeMutations).toHaveBeenCalled();
     expect(httpClient.get).not.toHaveBeenCalled();
   });

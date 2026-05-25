@@ -56,6 +56,7 @@ export default function App() {
       phone: formData.phone.trim(),
       company: formData.company?.trim() ?? "",
       city: formData.city?.trim() ?? "",
+      picture: formData.picture ?? "",
     };
 
     setFormSubmitting(true);
