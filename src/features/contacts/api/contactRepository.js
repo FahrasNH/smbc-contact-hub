@@ -1,10 +1,6 @@
 import * as randomUserAdapter from "./adapters/randomUserAdapter.js";
-import * as herokuAdapter from "./adapters/herokuAdapter.js";
-
-const provider = import.meta.env.VITE_API_PROVIDER || "randomuser";
 
 function getAdapter() {
-  if (provider === "heroku") return herokuAdapter;
   return randomUserAdapter;
 }
 
