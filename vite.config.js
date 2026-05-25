@@ -7,10 +7,16 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          "vendor-react": ["react", "react-dom"],
-          "vendor-redux": ["@reduxjs/toolkit", "react-redux"],
-          "vendor-ui": ["iconsax-react", "react-hot-toast"],
+        manualChunks(id) {
+          if (id.includes("node_modules/react") || id.includes("node_modules/react-dom")) {
+            return "vendor-react";
+          }
+          if (id.includes("node_modules/@reduxjs") || id.includes("node_modules/react-redux")) {
+            return "vendor-redux";
+          }
+          if (id.includes("node_modules/iconsax-react") || id.includes("node_modules/react-hot-toast")) {
+            return "vendor-ui";
+          }
         },
       },
     },
@@ -23,7 +29,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "html"],
       include: ["src/**/*.{js,jsx}"],
-      exclude: ["src/main.jsx", "src/setupTests.js", "src/app/App.jsx", "src/app/providers.jsx", "src/app/ContactTopNav.jsx", "src/features/contacts/hooks/useContacts.js", "src/features/contacts/api/adapters/herokuAdapter.js", "src/features/contacts/components/ContactToolbar.jsx"],
+      exclude: ["src/main.jsx", "src/setupTests.js", "src/app/App.jsx", "src/app/providers.jsx", "src/app/ContactTopNav.jsx", "src/features/contacts/hooks/useContacts.js", "src/features/contacts/components/ContactToolbar.jsx"],
     },
   },
 });
