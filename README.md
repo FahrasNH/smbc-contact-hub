@@ -41,8 +41,8 @@ npm run dev
 
 | Variable | Default |
 |----------|---------|
-| `VITE_API_PROVIDER` | `jsonplaceholder` |
-| `VITE_API_BASE_URL` | `https://jsonplaceholder.typicode.com` |
+| `VITE_API_PROVIDER` | `randomuser` |
+| `VITE_API_BASE_URL` | `https://randomuser.me` |
 
 ## Deploy
 
@@ -50,12 +50,21 @@ Deploy to Vercel with the same environment variables.
 
 ## API
 
-Project ini menggunakan [JSONPlaceholder](https://jsonplaceholder.typicode.com/users) sebagai data source.
+Project ini menggunakan [Random User Generator](https://randomuser.me/api/?results=30) sebagai data source.
 
-API Heroku yang tercantum di soal challenge (`contact.herokuapp.com`) sudah tidak dapat diakses (deprecated / down). Sebagai gantinya, app ini menggunakan JSONPlaceholder dengan strategi **localStorage overlay**:
+```
+GET https://randomuser.me/api/?results=30&seed=smbc-hub
+```
 
-- `GET /users` tetap diambil dari JSONPlaceholder
-- Operasi POST, PUT, DELETE hanya disimulasikan oleh JSONPlaceholder (tidak benar-benar persist di server)
-- Semua mutasi (create, update, delete) disimpan di `localStorage` browser agar data konsisten saat reload
+API Heroku yang tercantum di soal challenge (`contact.herokuapp.com`) sudah tidak dapat diakses (deprecated / down). Random User Generator digunakan sebagai pengganti karena menyediakan data user yang realistis (nama lengkap, email, telepon, kota, dan foto profil).
 
-Arsitektur adapter memungkinkan penggantian data source cukup dengan mengubah `VITE_API_PROVIDER` tanpa menyentuh kode UI.
+Karena Random User Generator hanya mendukung `GET`, semua operasi mutasi (create, update, delete) ditangani sepenuhnya di sisi klien menggunakan strategi **localStorage overlay**:
+
+- Data awal di-fetch dari `/api/?results=30&seed=smbc-hub` (seed tetap agar data konsisten setiap reload)
+- Create, update, delete disimpan di `localStorage` dan di-merge ke data server saat fetch
+- Arsitektur adapter memungkinkan penggantian backend cukup dengan mengubah `VITE_API_PROVIDER` tanpa menyentuh kode UI
+
+| Provider | Value |
+|----------|-------|
+| Random User (default) | `randomuser` |
+| JSONPlaceholder (fallback) | `jsonplaceholder` |
