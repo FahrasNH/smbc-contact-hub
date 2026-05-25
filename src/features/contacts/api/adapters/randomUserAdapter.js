@@ -32,7 +32,7 @@ export async function createContact(contactInput) {
     phone: contactInput.phone,
     company: contactInput.company ?? "",
     city: contactInput.city ?? "",
-    picture: "",
+    picture: contactInput.picture ?? "",
     updatedAt: nowIsoTimestamp(),
   };
   mutations.created.push(newContact);
