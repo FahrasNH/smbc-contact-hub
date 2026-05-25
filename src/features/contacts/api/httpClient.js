@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || "https://jsonplaceholder.typicode.com";
+const baseURL = import.meta.env.VITE_API_BASE_URL || "https://randomuser.me";
 
 export const httpClient = axios.create({
   baseURL,

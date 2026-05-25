@@ -11,20 +11,31 @@ function StatCell({ label, children }) {
   );
 }
 
-export function ContactCard({ contact, onEdit, onDelete }) {
+export function ContactCard({ contact, onEdit, onDelete, priority = false }) {
   const fullName = joinFullName(contact.firstName, contact.lastName);
 
   return (
     <li className="flex flex-col rounded-[2.5rem] bg-white p-8 shadow-[0_4px_28px_rgba(15,23,42,0.07)]">
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 flex-1 items-start gap-3">
-          <div
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xs font-bold text-neutral-700 sm:h-14 sm:w-14 sm:text-sm"
-            style={avatarBackgroundStyle(contact.id)}
-            aria-hidden
-          >
-            {initialsFromName(contact.firstName, contact.lastName)}
-          </div>
+          {contact.picture ? (
+            <img
+              className="h-12 w-12 shrink-0 rounded-full object-cover sm:h-14 sm:w-14"
+              src={contact.picture}
+              alt={fullName}
+              loading={priority ? "eager" : "lazy"}
+              decoding="async"
+              fetchpriority={priority ? "high" : "auto"}
+            />
+          ) : (
+            <div
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xs font-bold text-neutral-700 sm:h-14 sm:w-14 sm:text-sm"
+              style={avatarBackgroundStyle(contact.id)}
+              aria-hidden
+            >
+              {initialsFromName(contact.firstName, contact.lastName)}
+            </div>
+          )}
           <div className="min-w-0 flex-1">
             <h3 className="text-base font-bold tracking-tight text-neutral-900 sm:text-lg">{fullName}</h3>
             <p className="mt-1 truncate text-sm text-neutral-500">

@@ -10,10 +10,6 @@ export function joinFullName(firstName, lastName) {
   return [firstName, lastName].filter(Boolean).join(" ").trim();
 }
 
-export function seedUpdatedAtFromId(contactId) {
-  return new Date(2024, 0, contactId).toISOString();
-}
-
 export function nowIsoTimestamp() {
   return new Date().toISOString();
 }
