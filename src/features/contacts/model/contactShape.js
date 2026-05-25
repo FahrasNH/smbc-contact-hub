@@ -7,5 +7,6 @@ export function createEmptyContact() {
     phone: "",
     company: "",
     city: "",
+    picture: "",
   };
 }

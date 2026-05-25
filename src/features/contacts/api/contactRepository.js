@@ -1,11 +1,13 @@
+import * as randomUserAdapter from "./adapters/randomUserAdapter.js";
 import * as jsonPlaceholderAdapter from "./adapters/jsonPlaceholderAdapter.js";
 import * as herokuAdapter from "./adapters/herokuAdapter.js";
 
-const provider = import.meta.env.VITE_API_PROVIDER || "jsonplaceholder";
+const provider = import.meta.env.VITE_API_PROVIDER || "randomuser";
 
 function getAdapter() {
   if (provider === "heroku") return herokuAdapter;
-  return jsonPlaceholderAdapter;
+  if (provider === "jsonplaceholder") return jsonPlaceholderAdapter;
+  return randomUserAdapter;
 }
 
 export function getAll() {
