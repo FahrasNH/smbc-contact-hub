@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
-import { CloseCircle } from "iconsax-react";
+import { useEffect, useRef, useState } from "react";
+import { Camera, CloseCircle } from "iconsax-react";
 import { createEmptyContact } from "../model/contactShape.js";
+import { initialsFromName, avatarBackgroundStyle } from "../../../shared/lib/avatarUtils.js";
+import { joinFullName } from "../../../shared/lib/formatters.js";
 
 const inputClass =
   "h-11 w-full rounded-lg border border-neutral-200 bg-neutral-50 px-4 text-base text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-neutral-200 focus:bg-white focus:outline-none focus:ring-0";
 
 export function ContactForm({ contact, onSubmit, onCancel, isSubmitting }) {
   const [form, setForm] = useState(createEmptyContact());
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (contact) {
@@ -20,12 +23,28 @@ export function ContactForm({ contact, onSubmit, onCancel, isSubmitting }) {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setForm((prev) => ({ ...prev, picture: ev.target.result }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemovePicture = () => {
+    setForm((prev) => ({ ...prev, picture: "" }));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(form);
   };
 
   const isEdit = Boolean(contact?.id);
+  const fullName = joinFullName(form.firstName, form.lastName);
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/40 p-4 sm:items-center">
@@ -47,7 +66,52 @@ export function ContactForm({ contact, onSubmit, onCancel, isSubmitting }) {
             <CloseCircle size={24} variant="Linear" color="currentColor" aria-hidden />
           </button>
         </div>
-        <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
+
+        <div className="mt-5 flex flex-col items-center gap-2">
+          <button
+            type="button"
+            className="group relative cursor-pointer"
+            onClick={() => fileInputRef.current?.click()}
+            aria-label="Change profile photo"
+          >
+            {form.picture ? (
+              <img
+                className="h-20 w-20 rounded-full object-cover"
+                src={form.picture}
+                alt={fullName || "Profile photo"}
+              />
+            ) : (
+              <div
+                className="flex h-20 w-20 items-center justify-center rounded-full text-base font-bold text-neutral-700"
+                style={avatarBackgroundStyle(form.id ?? "new")}
+              >
+                {initialsFromName(form.firstName, form.lastName)}
+              </div>
+            )}
+            <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+              <Camera size={22} variant="Bold" color="white" aria-hidden />
+            </div>
+          </button>
+          <p className="text-xs text-neutral-400">Click to upload photo</p>
+          {form.picture && (
+            <button
+              type="button"
+              className="cursor-pointer text-xs text-red-500 hover:underline"
+              onClick={handleRemovePicture}
+            >
+              Remove photo
+            </button>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        <form className="mt-5 flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="firstName" className="mb-1 block text-sm font-medium text-neutral-700">
