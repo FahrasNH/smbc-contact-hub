@@ -41,7 +41,6 @@ npm run dev
 
 | Variable | Default |
 |----------|---------|
-| `VITE_API_PROVIDER` | `randomuser` |
 | `VITE_API_BASE_URL` | `https://randomuser.me` |
 
 ## Deploy
