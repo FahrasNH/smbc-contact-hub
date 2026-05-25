@@ -50,12 +50,13 @@ export function ContactList({
   return (
     <div className="flex flex-col gap-8">
       <ul className="flex list-none flex-col gap-8 p-0" role="region" aria-label="Contact directory">
-        {contacts.map((contact) => (
+        {contacts.map((contact, index) => (
           <ContactCard
             key={contact.id}
             contact={contact}
             onEdit={onEdit}
             onDelete={onDelete}
+            priority={index === 0}
           />
         ))}
       </ul>

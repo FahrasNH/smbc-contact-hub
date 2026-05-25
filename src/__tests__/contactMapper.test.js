@@ -8,7 +8,7 @@ const sampleRandomUser = {
   location: { city: "Billings" },
   login: { uuid: "7a0eed16-9430-4d68-901f-c0d4c1c3bf00" },
   registered: { date: "2007-07-09T05:51:59.390Z" },
-  picture: { medium: "https://randomuser.me/api/portraits/med/women/75.jpg" },
+  picture: { thumbnail: "https://randomuser.me/api/portraits/thumb/women/75.jpg" },
 };
 
 describe("mapRandomUserToContact", () => {
@@ -32,7 +32,7 @@ describe("mapRandomUserToContact", () => {
 
   it("maps picture url", () => {
     const contact = mapRandomUserToContact(sampleRandomUser);
-    expect(contact.picture).toBe("https://randomuser.me/api/portraits/med/women/75.jpg");
+    expect(contact.picture).toBe("https://randomuser.me/api/portraits/thumb/women/75.jpg");
   });
 
   it("uses registered.date as updatedAt", () => {

@@ -4,6 +4,17 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom"],
+          "vendor-redux": ["@reduxjs/toolkit", "react-redux"],
+          "vendor-ui": ["iconsax-react", "react-hot-toast"],
+        },
+      },
+    },
+  },
   test: {
     environment: "jsdom",
     globals: true,

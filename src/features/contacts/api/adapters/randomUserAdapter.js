@@ -3,6 +3,29 @@ import { mapRandomUserToContact } from "../../model/contactMapper.js";
 import { readMutations, writeMutations } from "../../../../shared/lib/storage.js";
 import { nowIsoTimestamp } from "../../../../shared/lib/formatters.js";
 
+const API_CACHE_KEY = "smbc_base_cache";
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+
+function getBaseCache() {
+  try {
+    const raw = localStorage.getItem(API_CACHE_KEY);
+    if (!raw) return null;
+    const { data, cachedAt } = JSON.parse(raw);
+    if (Date.now() - cachedAt > CACHE_TTL_MS) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setBaseCache(data) {
+  try {
+    localStorage.setItem(API_CACHE_KEY, JSON.stringify({ data, cachedAt: Date.now() }));
+  } catch {
+    // quota exceeded, skip cache
+  }
+}
+
 function mergeContacts(baseContacts, mutations) {
   const deletedSet = new Set(mutations.deletedIds);
   const merged = baseContacts
@@ -16,9 +39,20 @@ function nextLocalId(mutations) {
 }
 
 export async function fetchAllContacts() {
-  const response = await httpClient.get("/api/?results=30&seed=smbc-hub");
-  const base = response.data.results.map(mapRandomUserToContact);
   const mutations = readMutations();
+  const cached = getBaseCache();
+
+  if (cached) {
+    const base = cached.map(mapRandomUserToContact);
+    httpClient.get("/api/?results=30&seed=smbc-hub").then((res) => {
+      setBaseCache(res.data.results);
+    }).catch(() => {});
+    return mergeContacts(base, mutations);
+  }
+
+  const response = await httpClient.get("/api/?results=30&seed=smbc-hub");
+  setBaseCache(response.data.results);
+  const base = response.data.results.map(mapRandomUserToContact);
   return mergeContacts(base, mutations);
 }
 

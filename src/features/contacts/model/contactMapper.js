@@ -7,7 +7,7 @@ export function mapRandomUserToContact(user) {
     phone: user.phone ?? "",
     company: "",
     city: user.location?.city ?? "",
-    picture: user.picture?.medium ?? "",
+    picture: user.picture?.thumbnail ?? "",
     updatedAt: user.registered?.date ?? new Date().toISOString(),
   };
 }
